@@ -56,20 +56,24 @@ function startNewGame() {
   player2TotalDisplay.textContent = player2TotalScore;
 
   //set start current scores to 0
-  let player1CurrentScore = 0;
-  let player2CurrentScore = 0;
+  player1CurrentScore = 0;
+  player2CurrentScore = 0;
   player1CurrentDisplay.textContent = player1CurrentScore;
   player2CurrentDisplay.textContent = player2CurrentScore;
 
   isWinner = false;
-  if (!player1.classList.contains('player--active')) {
-    player1.classList.add('player--active');
-    player2.classList.remove('player-active');
-  }
+
+  player1.classList.add('player--active');
+  player2.classList.remove('player-active');
+  player1.classList.remove('player--winner');
+  player2.classList.remove('player-winner');
+
+  rollDiceBtn.disabled = false;
+  holdBtn.disabled = false;
 }
 
 function checkIfWinner(score) {
-  if (score >= 100) {
+  if (score >= 20) {
     return true;
   } else {
     return false;
@@ -83,6 +87,8 @@ function processCurrentScore() {
     isWinner = checkIfWinner(player1TotalScore);
     if (isWinner) {
       player1.classList.add('player--winner');
+      rollDiceBtn.disabled = 'true';
+      holdBtn.disabled = 'true';
     } else {
       player1CurrentScore = 0;
       player1CurrentDisplay.textContent = player1CurrentScore;
@@ -95,6 +101,8 @@ function processCurrentScore() {
     isWinner = checkIfWinner(player2TotalScore);
     if (isWinner) {
       player2.classList.add('player--winner');
+      rollDiceBtn.disabled = 'true';
+      holdBtn.disabled = 'true';
     } else {
       player2CurrentScore = 0;
       player2CurrentDisplay.textContent = player2CurrentScore;
@@ -133,28 +141,29 @@ function rollDice() {
 
   //output dice img on screen
   let image = document.querySelector('.dice');
-  let src = '';
+  // let src = '';
 
-  switch (roll) {
-    case 1:
-      src = './dice-1.png';
-      break;
-    case 2:
-      src = './dice-2.png';
-      break;
-    case 3:
-      src = './dice-3.png';
-      break;
-    case 4:
-      src = './dice-4.png';
-      break;
-    case 5:
-      src = './dice-5.png';
-      break;
-    case 6:
-      src = './dice-6.png';
-      break;
-  }
-  image.setAttribute('src', `${src}`);
+  // switch (roll) {
+  //   case 1:
+  //     src = './dice-1.png';
+  //     break;
+  //   case 2:
+  //     src = './dice-2.png';
+  //     break;
+  //   case 3:
+  //     src = './dice-3.png';
+  //     break;
+  //   case 4:
+  //     src = './dice-4.png';
+  //     break;
+  //   case 5:
+  //     src = './dice-5.png';
+  //     break;
+  //   case 6:
+  //     src = './dice-6.png';
+  //     break;
+  // }
+  // image.setAttribute('src', `${src}`);
+  image.src = `./dice-${roll}.png`;
   return roll;
 }
