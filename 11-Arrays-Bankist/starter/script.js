@@ -4,15 +4,6 @@
 /////////////////////////////////////////////////
 // BANKIST APP
 
-/*
-1. compare username and pin to accounts in the array
-2. if correct, display correct account
-  - change log in sign
-  - call all the functions using the appropriate account info
-3.if not, create an alert
-
-*/
-
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -43,6 +34,30 @@ const account4 = {
 };
 
 const accounts = [account1, account2, account3, account4];
+
+// ARRAY PRACTICE
+// How much in total deposited in the bank
+// 1. Make one giant array
+
+const totalMovements = [];
+accounts.forEach(function (account) {
+  totalMovements.push(account.movements);
+});
+const totalMoves = totalMovements.flat(1);
+const totalDeposits = totalMoves
+  .map(function (move) {
+    return move;
+  })
+  .filter(x => x > 0)
+  .reduce((prev, curr) => prev + curr, 0);
+console.log('totalDepsoits', totalDeposits);
+
+// Deposits in the bank with at least $1000
+
+const totalBankDeposits = accounts
+  .flatMap(account => account.movements)
+  .filter(account => account >= 1000).length;
+console.log(totalBankDeposits);
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -104,7 +119,6 @@ const displayCurrentBalance = function (account) {
 };
 
 // DISPLAY SUMMARIES
-
 const calcDisplaySummary = function (account) {
   const movements = account.movements;
   const interest = account.interestRate / 100;
@@ -126,37 +140,6 @@ const calcDisplaySummary = function (account) {
   labelSumOut.textContent = `${Math.abs(totalWithdrawals)}€`;
   labelSumInterest.textContent = `${totalInterest}€`;
 };
-
-// FUNCTION CALLS
-// calcDisplaySummary(account1);
-// displayMovements(account1.movements);
-// displayCurrentBalance(account1.movements);
-
-// const movements = [200, 450, -400, 3000, 6520, -130, 70, 1300];
-
-// const getMax = movements.reduce(function (max, curr) {
-//   if (curr > max) {
-//     max = curr;
-//   }
-//   return max;
-// });
-
-// // console.log('max', getMax);
-
-// const deposits = movements.filter(function (movement) {
-//   return movement > 0;
-// });
-
-// const withdrawals = movements.filter(function (movement) {
-//   return movement < 0;
-// });
-
-// // console.log(deposits, withdrawals);
-
-// const balance = movements.reduce(function (prev, curr) {
-//   return prev + curr;
-// }, 0);
-// console.log(balance);
 
 // UPDATE UI
 const updateUI = function (account) {
@@ -205,7 +188,6 @@ btnLogin.addEventListener('click', function (e) {
   }
 });
 
-// IMPLEMENT TRANSFER FUNCTIONALITY
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -229,11 +211,9 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
-// deposit that is at least 10% greater than requested loan amount
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   const request = Number(inputLoanAmount.value);
-  //
   if (
     request > 0 &&
     currentAccount.movements.some(function (movement) {
@@ -270,32 +250,6 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
 });
-
-// Video lesson scripts *************************************************************
-
-// const movements = account1.movements;
-
-// const euroToUsd = 1.1;
-
-// const movementsUSD = movements.map(mov => euroToUsd * mov);
-// console.log(movementsUSD);
-
-// console.log(movements);
-
-// const movementDescriptions = movements.map(
-//   (mov, i, arr) =>
-//     `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
-//       mov
-//     )}`
-// );
-
-// console.log(movementDescriptions);
-
-// console.log(accounts);
-const user2 = accounts.find(
-  account => account.owner === 'Steven Thomas Williams'
-);
-// console.log(user2);
 
 //************CODING CHALLENGES***********************************************
 // CODING CHALLENGE #1
@@ -340,3 +294,72 @@ const calcAverageHumanAge2 = dogAges =>
 
 //checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
 // checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
+
+// CODING CHALLENGE #4
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+// #1
+dogs.forEach(function (dog) {
+  dog.recommendedFood = dog.weight ** 0.75 * 28;
+});
+
+// #2
+const dogsSarah = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(
+  `Sarah's dog is eating too ${
+    dogsSarah.curFood > dogsSarah.recommendedFood ? 'much' : 'litte'
+  }!`
+);
+
+// #3
+const ownersEatTooMuch = dogs
+  .filter(dog => dog.curFood > dog.recommendedFood * 1.1)
+  .flatMap(owner => owner.owners);
+
+console.log(ownersEatTooMuch);
+
+const ownersEatTooLittle = dogs
+  .filter(dog => dog.curFood < dog.recommendedFood * 0.9)
+  .flatMap(owner => owner.owners);
+
+console.log(ownersEatTooLittle);
+
+// #4
+const tooMuch = ownersEatTooMuch.join(' and ');
+console.log(`${tooMuch}'s dogs eats too much!`);
+const tooLittle = ownersEatTooLittle.join(' and ');
+console.log(`${tooLittle}'s dogs eats too little!`);
+
+// #5
+const isJustRight = dogs.some(dog => dog.curFood === dog.recommendedFood);
+console.log(isJustRight);
+
+// #6
+const isOk = dogs.some(
+  dog =>
+    dog.curFood < dog.recommendedFood * 1.1 &&
+    dog.curFood > dog.recommendedFood * 0.9
+);
+console.log(isOk);
+
+// #7
+const eatingOk = dogs.filter(
+  dog =>
+    dog.curFood < dog.recommendedFood * 1.1 &&
+    dog.curFood > dog.recommendedFood * 0.9
+);
+console.log(eatingOk);
+
+// #8
+const dogs2 = Array.from(dogs);
+console.log(dogs);
+dogs2.sort(function (a, b) {
+  return a.recommendedFood - b.recommendedFood;
+});
+console.log(dogs2);
