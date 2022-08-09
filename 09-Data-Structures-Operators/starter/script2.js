@@ -43,9 +43,11 @@ const restaurant = {
 };
 
 const { openingHours } = restaurant;
-console.log(openingHours);
+// console.log(openingHours);
 
 const {
     fri: { open, close },
 } = openingHours;
-console.log(open);
+
+const arr = [7, 8, 9];
+// console.log(...arr); // spread operator takes all individual elements from array
