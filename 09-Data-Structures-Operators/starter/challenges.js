@@ -111,36 +111,157 @@ BONUS: Create an object called 'scorers' which contains the names of the players
 GOOD LUCK 😀
 */
 
-// 1.
-const { scored } = game;
-for (let [goal, name] of scored.entries()) {
-    console.log(`Goal ${goal + 1}: ${name}`);
-}
+// // 1.
+// const { scored } = game;
+// for (let [goal, name] of scored.entries()) {
+//     console.log(`Goal ${goal + 1}: ${name}`);
+// }
 
-// 2.
-const { odds } = game;
-const oddsArr = Object.values(odds);
-let sum = 0;
-for (const average of oddsArr) {
-    sum += average;
-}
-const average = sum / oddsArr.length;
-console.log(average);
+// // 2.
+// const { odds } = game;
+// const oddsArr = Object.values(odds);
+// let sum = 0;
+// for (const average of oddsArr) {
+//     sum += average;
+// }
+// const average = sum / oddsArr.length;
+// console.log(average);
 
-// 3.
-for (const [team, odd] of Object.entries(odds)) {
-    console.log(`Odd of victory ${game[team] || "draw"}: ${odd}`);
-}
+// // 3.
+// for (const [team, odd] of Object.entries(odds)) {
+//     console.log(`Odd of victory ${game[team] || "draw"}: ${odd}`);
+// }
 
-// Bonus.
+// // Bonus.
 
-let scorers = {};
-let score = 0;
+// let scorers = {};
+// let score = 0;
 
-const scoredArr = Object.values(scored);
+// const scoredArr = Object.values(scored);
 
-for (let scorer of scoredArr) {
-    console.log((scorers[scorer] = scorer));
-}
+// for (let scorer of scoredArr) {
+//     console.log((scorers[scorer] = scorer));
+// }
 
-console.log(scorers);
+// console.log(scorers);
+
+///////////////////////////////////////
+// Coding Challenge #3
+
+/* 
+Let's continue with our football betting app! This time, we have a map with a log of the events that happened during the game. The values are the events themselves, and the keys are the minutes in which each event happened (a football game has 90 minutes plus some extra time).
+
+1. Create an array 'events' of the different game events that happened (no duplicates)
+2. After the game has finished, is was found that the yellow card from minute 64 was unfair. So remove this event from the game events log.
+3. Print the following string to the console: "An event happened, on average, every 9 minutes" (keep in mind that a game has 90 minutes)
+4. Loop over the events and log them to the console, marking whether it's in the first half or second half (after 45 min) of the game, like this:
+      [FIRST HALF] 17: ⚽️ GOAL
+
+GOOD LUCK 😀
+*/
+
+// const gameEvents = new Map([
+//     [17, "⚽️ GOAL"],
+//     [36, "🔁 Substitution"],
+//     [47, "⚽️ GOAL"],
+//     [61, "🔁 Substitution"],
+//     [64, "🔶 Yellow card"],
+//     [69, "🔴 Red card"],
+//     [70, "🔁 Substitution"],
+//     [72, "🔁 Substitution"],
+//     [76, "⚽️ GOAL"],
+//     [80, "⚽️ GOAL"],
+//     [92, "🔶 Yellow card"],
+// ]);
+
+// const events = [...new Set(gameEvents.values())];
+// console.log(events);
+
+// console.log(gameEvents.delete(64));
+// console.log(gameEvents.entries());
+
+// let eventTimes = 0;
+
+// for (const eventTime of gameEvents.keys()) {
+//     eventTimes += eventTime;
+// }
+
+// console.log(
+//     `And event happened, on average, every ${(eventTimes / 90).toFixed(
+//         2
+//     )} minutes`
+// );
+
+// for (const [time, event] of gameEvents.entries()) {
+//     time < 45
+//         ? console.log(`[FIRST HALF] ${time}: ${event}`)
+//         : console.log(`[SECOND HALF] ${time}: ${event}`);
+// }
+
+///////////////////////////////////////
+// Coding Challenge #4
+
+/* 
+Write a program that receives a list of variable names written in underscore_case and convert them to camelCase.
+
+The input will come from a textarea inserted into the DOM (see code below), and conversion will happen when the button is pressed.
+
+THIS TEST DATA (pasted to textarea)
+underscore_case
+ first_name
+Some_Variable 
+  calculate_AGE
+delayed_departure
+
+SHOULD PRODUCE THIS OUTPUT (5 separate console.log outputs)
+underscoreCase      ✅
+firstName           ✅✅
+someVariable        ✅✅✅
+calculateAge        ✅✅✅✅
+delayedDeparture    ✅✅✅✅✅
+
+HINT 1: Remember which character defines a new line in the textarea 😉
+HINT 2: The solution only needs to work for a variable made out of 2 words, like a_b
+HINT 3: Start without worrying about the ✅. Tackle that only after you have the variable name conversion working 😉
+HINT 4: This challenge is difficult on purpose, so start watching the solution in case you're stuck. Then pause and continue!
+
+Afterwards, test with your own test data!
+
+GOOD LUCK 😀
+*/
+
+const btn = document.querySelector(".btn-text");
+const textArea = document.querySelector("#text-area");
+let data = "";
+let allWords = [];
+let noUnder = [];
+let finalWords = [];
+let flags = "";
+
+const newArr = (data) => {
+    return data.split("\n");
+};
+
+btn.addEventListener("click", (e) => {
+    data = textArea.value;
+    const splitArr = newArr(data);
+
+    for (const word of splitArr) {
+        allWords.push(word.toLowerCase().trim());
+    }
+
+    for (const splitWords of allWords) {
+        noUnder.push(splitWords.split("_"));
+    }
+
+    for (const [first, second] of noUnder) {
+        finalWords.push(
+            `${first}${second.replace(second[0], second[0].toUpperCase())}`
+        );
+    }
+    finalWords.forEach((word, index) => {
+        console.log(
+            `${word.padEnd(20, " ")}${flags.padStart(index + 1, "✅")}`
+        );
+    });
+});
